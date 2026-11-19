@@ -1,9 +1,10 @@
 import { redirect } from 'next/navigation';
+import { adminHref } from '@/lib/admin-path';
 import { isAdmin } from '@/lib/auth/session';
 import { LoginForm } from '@/components/admin/LoginForm';
 
 export default async function AdminLoginPage() {
-  if (await isAdmin()) redirect('/admin');
+  if (await isAdmin()) redirect(adminHref());
 
   return (
     <div className="mx-auto mt-[12vh] max-w-[360px] text-center">

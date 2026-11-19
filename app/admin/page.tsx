@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { logout } from './actions';
+import { adminHref } from '@/lib/admin-path';
 import { isAdmin } from '@/lib/auth/session';
 import { ADMIN_PAGE_SIZE, listWaitlist } from '@/lib/waitlist/queries';
 import { adminFiltersSchema, type AdminFilters } from '@/lib/waitlist/validation';
@@ -11,7 +12,7 @@ import { adminGhostButton } from '@/components/admin/styles';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
-function hrefFor(filters: AdminFilters, page: number, base = '/admin') {
+function hrefFor(filters: AdminFilters, page: number, base = adminHref()) {
   const params = new URLSearchParams();
   if (filters.search) params.set('search', filters.search);
   if (filters.status) params.set('status', filters.status);
@@ -21,7 +22,7 @@ function hrefFor(filters: AdminFilters, page: number, base = '/admin') {
 }
 
 export default async function AdminPage({ searchParams }: { searchParams: SearchParams }) {
-  if (!(await isAdmin())) redirect('/admin/login');
+  if (!(await isAdmin())) redirect(adminHref('/login'));
 
   const raw = await searchParams;
   const filters = adminFiltersSchema.parse({
@@ -39,7 +40,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
         <h1 className="m-0 text-2xl font-bold tracking-[-0.01em]">Waitlist</h1>
         <div className="flex gap-3">
           {/* Plain link: the session cookie is sent and the response downloads as a file. */}
-          <a className={adminGhostButton} href={hrefFor({ ...filters, page: 1 }, 1, '/admin/export')}>
+          <a className={adminGhostButton} href={hrefFor({ ...filters, page: 1 }, 1, adminHref('/export'))}>
             Export CSV
           </a>
           <form action={logout}>
@@ -51,7 +52,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
       </div>
 
       <div className="mb-5 flex flex-wrap items-center gap-2.5">
-        <Filters search={filters.search ?? ''} status={filters.status ?? ''} />
+        <Filters basePath={adminHref()} search={filters.search ?? ''} status={filters.status ?? ''} />
         <span className="ml-auto font-mono text-xs text-faint">
           {total} signup{total === 1 ? '' : 's'}
         </span>

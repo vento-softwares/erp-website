@@ -1,14 +1,15 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { WAITLIST_STATUSES } from '@/lib/waitlist/constants';
 import { adminField } from './styles';
 
 /** Search box + status filter, kept in the URL so views are shareable. */
-export function Filters({ search, status }: { search: string; status: string }) {
+// basePath comes from the server: with a hidden ADMIN_PATH the page is served
+// via a rewrite, so the browser URL differs from the route.
+export function Filters({ basePath, search, status }: { basePath: string; search: string; status: string }) {
   const router = useRouter();
-  const pathname = usePathname();
   const params = useSearchParams();
   const [term, setTerm] = useState(search);
   const [pending, startTransition] = useTransition();
@@ -24,7 +25,7 @@ export function Filters({ search, status }: { search: string; status: string }) 
     }
     qs.delete('page'); // any filter change goes back to page 1
     const query = qs.toString();
-    startTransition(() => router.replace(query ? `${pathname}?${query}` : pathname));
+    startTransition(() => router.replace(query ? `${basePath}?${query}` : basePath));
   }
 
   return (

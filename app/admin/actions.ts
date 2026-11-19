@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { adminHref } from '@/lib/admin-path';
 import { createSession, destroySession, isAdmin, isCorrectPassword } from '@/lib/auth/session';
 import { isLoginRateLimited } from '@/lib/rate-limit';
 import { getClientIp } from '@/lib/request';
@@ -20,12 +21,12 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
     return { error: 'Incorrect password.' };
   }
   await createSession();
-  redirect('/admin');
+  redirect(adminHref());
 }
 
 export async function logout() {
   await destroySession();
-  redirect('/admin/login');
+  redirect(adminHref('/login'));
 }
 
 const updateSchema = z
@@ -53,6 +54,7 @@ export async function updateEntry(input: z.input<typeof updateSchema>): Promise<
     return { ok: false, error: 'Failed to save that change. Please retry.' };
   }
 
+  // Route path (app/admin), not the public URL.
   revalidatePath('/admin');
   return { ok: true };
 }

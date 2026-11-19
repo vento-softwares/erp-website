@@ -28,7 +28,7 @@ lib/
   waitlist/queries.ts                 Admin queries
   auth/                               Signed session cookie (jose)
   rate-limit.ts, turnstile.ts, loops.ts, csv.ts, analytics.ts
-proxy.ts                              Redirects unauthenticated /admin requests
+proxy.ts                              Hides /admin behind ADMIN_PATH; redirects unauthenticated admin requests
 instrumentation.ts                    Validates env when the server boots
 drizzle/                              Generated SQL migrations (commit these)
 scripts/import-waitlist.ts            One-off CSV import (e.g. from Supabase)
@@ -85,7 +85,7 @@ With `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` set, the waitli
 
 ## Admin
 
-Visit `/admin` and log in with `ADMIN_PASSWORD`. A successful login sets a signed, httpOnly session cookie (12 hours). From there you can:
+Visit `/admin` (or `/<ADMIN_PATH>` when `ADMIN_PATH` is set; `/admin` then returns 404) and log in with `ADMIN_PASSWORD`. A successful login sets a signed, httpOnly session cookie (12 hours). From there you can:
 
 - search by name/email, filter by status, and page through results (filters live in the URL, so views can be bookmarked)
 - change `status` and toggle `invite sent` (saved immediately)
@@ -99,6 +99,7 @@ Visit `/admin` and log in with `ADMIN_PASSWORD`. A successful login sets a signe
 |---|---|---|
 | `DATABASE_URL` | yes | no |
 | `ADMIN_PASSWORD` (≥12 chars) | yes | no |
+| `ADMIN_PATH` (secret admin URL segment) | recommended | no |
 | `SESSION_SECRET` (≥32 chars) | yes | no |
 | `LOOPS_API_KEY` | recommended | no |
 | `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST` | optional | yes (public by design) |

@@ -15,6 +15,16 @@ const serverSchema = z
     ADMIN_PASSWORD: z.string().min(8, 'ADMIN_PASSWORD must be at least 8 characters.'),
     SESSION_SECRET: z.string().min(32, 'SESSION_SECRET must be at least 32 characters (try `openssl rand -base64 48`).'),
 
+    ADMIN_PATH: optional.pipe(
+      z
+        .string()
+        .regex(
+          /^[A-Za-z0-9_-]{12,64}$/,
+          'ADMIN_PATH must be 12-64 letters, digits, "-" or "_", with no slashes (e.g. ops-k3v9x2m7q4).',
+        )
+        .optional(),
+    ),
+
     LOOPS_API_KEY: optional,
 
     UPSTASH_REDIS_REST_URL: optional,
