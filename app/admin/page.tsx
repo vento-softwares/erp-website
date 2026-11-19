@@ -35,8 +35,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
 
   return (
     <>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="mt-0 mb-6 text-2xl font-bold tracking-[-0.01em]">Waitlist</h1>
+      <div className="mb-10 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="m-0 text-2xl font-bold tracking-[-0.01em]">Waitlist</h1>
         <div className="flex gap-3">
           {/* Plain link: the session cookie is sent and the response downloads as a file. */}
           <a className={adminGhostButton} href={hrefFor({ ...filters, page: 1 }, 1, '/admin/export')}>

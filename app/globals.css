@@ -99,6 +99,20 @@
   input::placeholder {
     color: var(--color-faint);
   }
+  /* Native dropdown lists render outside the page, on a white system
+     background by default, which hid the inherited white option text.
+     A dark color-scheme plus explicit option colours keeps them legible. */
+  select {
+    color-scheme: dark;
+  }
+  select option {
+    background-color: var(--color-panel);
+    color: var(--color-fg);
+  }
+  select option:checked {
+    background-color: var(--color-brand);
+    color: var(--color-fg);
+  }
   button {
     font: inherit;
     cursor: pointer;
