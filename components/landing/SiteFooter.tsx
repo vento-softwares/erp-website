@@ -41,6 +41,16 @@ export function SiteFooter() {
                 ),
               )}
             </nav>
+            {FOOTER.social.length > 0 && (
+              <nav aria-label="Follow" className="flex flex-col gap-3">
+                <span className={columnHeading}>FOLLOW</span>
+                {FOOTER.social.map((l) => (
+                  <a key={l.label} className={linkClass} href={l.href} target="_blank" rel="noopener noreferrer">
+                    {l.label}
+                  </a>
+                ))}
+              </nav>
+            )}
           </div>
         </div>
 

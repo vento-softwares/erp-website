@@ -20,7 +20,7 @@ export function CtaLink({ onClick, children, ...rest }: ComponentPropsWithoutRef
   );
 }
 
-/** Link for a page that doesn't exist yet (LinkedIn, Privacy, Terms). */
+/** Link for a page that doesn't exist yet (Privacy, Terms). */
 export function PlaceholderLink({ children, ...rest }: ComponentPropsWithoutRef<'a'>) {
   return (
     <a href="#" aria-disabled="true" onClick={(e) => e.preventDefault()} {...rest}>

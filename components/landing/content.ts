@@ -154,9 +154,19 @@ export const FOOTER = {
   // `href: null` = page not built yet; rendered as an inert placeholder link.
   company: [
     { label: 'Contact', href: `mailto:${CONTACT_EMAIL}` },
-    { label: 'LinkedIn', href: null },
     { label: 'Privacy', href: null },
     { label: 'Terms', href: null },
   ],
+  // URLs come from NEXT_PUBLIC_SOCIAL_* env vars (see .env.example). Accounts
+  // without a URL are left out; the column is hidden when none are set.
+  // Each process.env access must stay literal so Next.js can inline it.
+  social: [
+    { label: 'LinkedIn', href: process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN_URL },
+    { label: 'Instagram', href: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM_URL },
+    { label: 'X', href: process.env.NEXT_PUBLIC_SOCIAL_X_URL },
+    { label: 'Facebook', href: process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK_URL },
+  ]
+    .map((l) => ({ label: l.label, href: l.href?.trim() }))
+    .filter((l): l is { label: string; href: string } => Boolean(l.href)),
   tagline: 'ALL-IN-ONE BUSINESS MANAGEMENT',
 };
