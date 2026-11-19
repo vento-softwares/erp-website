@@ -9,6 +9,11 @@ const optional = z
   .optional()
   .transform((v) => (v ? v : undefined));
 
+const optionalUrl = (name: string) =>
+  optional.pipe(
+    z.url({ protocol: /^https$/, message: `${name} must be a full https:// URL.` }).optional(),
+  );
+
 const serverSchema = z
   .object({
     DATABASE_URL: z.url({ message: 'DATABASE_URL must be a Postgres connection string (Neon -> Connect).' }),
@@ -32,6 +37,11 @@ const serverSchema = z
 
     TURNSTILE_SECRET_KEY: optional,
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: optional,
+
+    NEXT_PUBLIC_SOCIAL_LINKEDIN_URL: optionalUrl('NEXT_PUBLIC_SOCIAL_LINKEDIN_URL'),
+    NEXT_PUBLIC_SOCIAL_INSTAGRAM_URL: optionalUrl('NEXT_PUBLIC_SOCIAL_INSTAGRAM_URL'),
+    NEXT_PUBLIC_SOCIAL_X_URL: optionalUrl('NEXT_PUBLIC_SOCIAL_X_URL'),
+    NEXT_PUBLIC_SOCIAL_FACEBOOK_URL: optionalUrl('NEXT_PUBLIC_SOCIAL_FACEBOOK_URL'),
   })
   .refine((env) => Boolean(env.UPSTASH_REDIS_REST_URL) === Boolean(env.UPSTASH_REDIS_REST_TOKEN), {
     message: 'Set both UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN, or neither.',
